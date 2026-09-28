@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#070914">
+  <meta name="description" content="FirmwareVault — public firmware discovery and direct-download index.">
+  <title>FirmwareVault — Firmware Discovery Engine</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="orb orb-a"></div><div class="orb orb-b"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="FirmwareVault home">
+      <span class="brand-mark">FV</span>
+      <span><b>FirmwareVault</b><small>PUBLIC FIRMWARE DISCOVERY</small></span>
+    </a>
+    <nav>
+      <a href="#search">Search</a>
+      <a href="#submit">Submit</a>
+      <a href="#how">How it works</a>
+      <button class="ghost" id="themeBtn" type="button" aria-label="Toggle theme">◐</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="search">
+      <div class="eyebrow"><span class="pulse"></span> OPEN • DIRECT • COMMUNITY INDEXED</div>
+      <h1>Find the <em>exact firmware</em><br>without hunting the web.</h1>
+      <p class="hero-copy">Search by brand and model. FirmwareVault combines public archive discovery, GitHub discovery and community-submitted direct links into one fast interface.</p>
+
+      <form id="searchForm" class="searchbox">
+        <div class="field">
+          <label for="brand">Brand</label>
+          <input id="brand" name="brand" placeholder="Samsung, Nokia, Xiaomi…" autocomplete="off">
+        </div>
+        <div class="field model-field">
+          <label for="model">Model / variant</label>
+          <input id="model" name="model" placeholder="SM-A235F, Lumia 550, Redmi Note 12…" autocomplete="off" required>
+        </div>
+        <select id="platform" aria-label="Platform">
+          <option value="all">All platforms</option>
+          <option value="android">Android</option>
+          <option value="ios">iOS</option>
+          <option value="windows">Windows</option>
+          <option value="router">Router / IoT</option>
+          <option value="other">Other</option>
+        </select>
+        <button class="search-btn" type="submit"><span>⌕</span> Search firmware</button>
+      </form>
+
+      <div class="quick">
+        <span>Try:</span>
+        <button data-example="Samsung|SM-A235F">Samsung SM-A235F</button>
+        <button data-example="Microsoft|Lumia 550">Microsoft Lumia 550</button>
+        <button data-example="Xiaomi|Redmi Note 12">Xiaomi Redmi Note 12</button>
+      </div>
+
+      <div class="stats">
+        <div><strong id="sourceCount">3</strong><span>discovery sources</span></div>
+        <div><strong>0</strong><span>paid-file bypasses</span></div>
+        <div><strong>1-click</strong><span>direct downloads</span></div>
+        <div><strong>24/7</strong><span>community index</span></div>
+      </div>
+    </section>
+
+    <section class="results-section">
+      <div class="section-head">
+        <div><span class="eyebrow">RESULTS</span><h2 id="resultsTitle">Ready when you are</h2></div>
+        <div class="toolbar">
+          <select id="sortSelect" disabled>
+            <option value="relevance">Relevance</option>
+            <option value="newest">Newest indexed</option>
+            <option value="size">Largest first</option>
+            <option value="source">Source</option>
+          </select>
+          <button id="copyAllBtn" class="mini-btn" disabled>Copy links</button>
+        </div>
+      </div>
+      <div id="status" class="status-card">
+        <div class="status-icon">⌁</div>
+        <div><b>Search a model to start</b><span>Results are scored for model-name matches, firmware-like filenames and public direct links.</span></div>
+      </div>
+      <div id="results" class="results-grid"></div>
+    </section>
+
+    <section class="submit-section" id="submit">
+      <div class="submit-panel">
+        <div>
+          <span class="eyebrow">COMMUNITY DROPBOX</span>
+          <h2>Have a working direct link?</h2>
+          <p>Submit a public firmware URL. After moderation rules and a basic reachability check, it becomes searchable for other users.</p>
+          <ul class="feature-list">
+            <li>✓ Direct HTTP(S) links only</li>
+            <li>✓ No passwords, login bypasses or paid-file circumvention</li>
+            <li>✓ SHA-256 field for community verification</li>
+            <li>✓ Stored in Google Sheets through Apps Script</li>
+          </ul>
+        </div>
+        <form id="submitForm" class="drop-form">
+          <input id="sBrand" required placeholder="Brand">
+          <input id="sModel" required placeholder="Exact model / variant">
+          <input id="sName" required placeholder="Firmware filename / build">
+          <input id="sUrl" type="url" required placeholder="https://example.com/firmware.zip">
+          <input id="sVersion" placeholder="Version / build (optional)">
+          <input id="sHash" placeholder="SHA-256 (optional)">
+          <textarea id="sNotes" rows="3" placeholder="Notes: region, carrier, Android version, device variant…"></textarea>
+          <label class="check"><input id="sConfirm" type="checkbox" required> I confirm this is a public link I am allowed to share.</label>
+          <button class="primary" type="submit">Submit firmware link →</button>
+          <div id="submitStatus" class="form-status"></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="how" id="how">
+      <span class="eyebrow">PIPELINE</span>
+      <h2>Discovery, not a file host.</h2>
+      <div class="steps">
+        <article><span>01</span><h3>Normalize</h3><p>Brand/model text is normalized so variants like SM-A235F, A235F and Galaxy A23 can be searched together.</p></article>
+        <article><span>02</span><h3>Discover</h3><p>Apps Script queries public archive and GitHub indexes plus the community Sheet. It does not defeat authentication or paid access.</p></article>
+        <article><span>03</span><h3>Score</h3><p>Exact model tokens, filename extensions, region/build hints and source quality influence the displayed relevance.</p></article>
+        <article><span>04</span><h3>Download</h3><p>The browser goes to the original public URL. FirmwareVault does not proxy large files, so your download can use the source host's full available bandwidth.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="signature">╰─➤ ⚡ <b>𝐁𝐔𝐈𝐋𝐓 𝐁𝐘 𝐅𝐀𝐈𝐙𝐀𝐍™</b></div>
+    <span>FirmwareVault • public-link discovery engine</span>
+    <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+
+  <template id="resultTemplate">
+    <article class="result-card">
+      <div class="result-top">
+        <span class="source-pill"></span>
+        <span class="score"></span>
+      </div>
+      <h3 class="result-name"></h3>
+      <p class="result-meta"></p>
+      <div class="tags"></div>
+      <div class="result-actions">
+        <a class="download primary" target="_blank" rel="noopener noreferrer">↓ Direct download</a>
+        <button class="copy mini-btn">Copy</button>
+        <a class="source-link mini-btn" target="_blank" rel="noopener noreferrer">Source</a>
+      </div>
+    </article>
+  </template>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
